@@ -205,4 +205,5 @@ module exports = {
   onGetList,
   onGetCourse,
   onDocument,
+  onCBquery,
 };
