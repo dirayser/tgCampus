@@ -82,3 +82,12 @@ async function onGetList(ctx) { // on bot /get_list
     answerWithCourses(ctx, coursesExist, true);
   }
 }
+
+function onGetCourse(ctx) { // on bot /get_course
+  const userID = ctx.message.from.id;
+  statuses.set(userID, 'wait:courseName');
+  courses[userID] = {
+    courseID: uidgen.generateSync(),
+  };
+  ctx.reply('Задайте название курса:');
+}
