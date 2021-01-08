@@ -158,3 +158,19 @@ async function onCBquery(ctx) { // on bot callback query
     ctx.reply(replyText);
   }
 }
+
+function answerWithGroups(ctx, groups) { // answers with groups keyboard
+  const inlineKeyBoard = [];
+  groups.forEach(group => inlineKeyBoard.push([
+    {
+      text: group['group_name'],
+      'callback_data': `course:${group['cg_id']}:group:${group['group_name']}`,
+    },
+  ]));
+  const keyboard = {
+    'reply_markup': JSON.stringify({
+      'inline_keyboard': inlineKeyBoard,
+    }),
+  };
+  ctx.reply('Выберите группу:', keyboard);
+}
