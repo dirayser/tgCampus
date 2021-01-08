@@ -8,5 +8,8 @@ process.on('unhandledRejection', error => {
   console.log(error);
   pool.end();
 });
+process.on('exit', () => {
+  pool.end();
+})
 
 const uidgen = new UIDGenerator();
