@@ -14,3 +14,14 @@ function onCourseNameGet(ctx, text, userID) { // on courseName waited
   statuses.set(userID, 'wait:labNumb');
   ctx.reply('Количество лабораторных работ в курсе:');
 }
+
+function onLabNumGet(ctx, text, userID) { // on labsNumb waited
+  const n = +text;
+  if (n <= 10 && n >= 0) {
+    courses[userID].labNumb = Math.floor(n);
+    statuses.set(userID, 'wait:testNumb');
+    ctx.reply('Количество контрольных работ в курсе:');
+  } else {
+    ctx.reply('0 <= Количество контрольных <= 10');
+  }
+}
