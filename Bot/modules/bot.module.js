@@ -114,3 +114,20 @@ async function onDocument(ctx) { // on bot document
   await db.createCourseXTable(cgID, labsN, testsN, additional);
   await db.fillCourseXTable(cgID, withTokens, labsN, testsN, additional);
 }
+
+function answerWithCourses(ctx, answer, isListNeeded) { // answers with courses keyboard
+  const inlineKeyboard = [];
+  answer.forEach(course => inlineKeyboard.push([
+    {
+      text: course['course_name'],
+      'callback_data':
+        `course:${course['course_id']}${isListNeeded ? ':list' : ''}`,
+    },
+  ]));
+  const keyboard = {
+    'reply_markup': JSON.stringify({
+      'inline_keyboard': inlineKeyboard,
+    }),
+  };
+  ctx.reply('Выберите курс:', keyboard);
+}
