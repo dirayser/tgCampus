@@ -63,3 +63,12 @@ function isDocWaited(ctx) { // checks if document is waited
   return false;
 }
 
+async function onAddGroup(ctx) { // on bot /add_group
+  const userID = ctx.message.from.id;
+  const coursesExist = await db.getCourses(userID);
+  if (!coursesExist.length) {
+    ctx.reply('Отсутствуют курсы для добавления групп');
+  } else {
+    answerWithCourses(ctx, coursesExist, false);
+  }
+}
