@@ -43,3 +43,23 @@ function onAdditGet(ctx, text, userID) { // on additional waited
   statuses.set(userID, 'wait:check');
   ctx.reply('Всё верно? (y/n)\n' + JSON.stringify(courses[userID]));
 }
+
+async function onCheck(ctx, text, userID, username) { // on check waited
+  if (text.toLowerCase() === 'y') {
+    await db.insertCourse(ctx, courses, userID, username);
+  } else {
+    ctx.reply('Курс не добавлен');
+  }
+  statuses.unset(userID);
+}
+
+function isDocWaited(ctx) { // checks if document is waited
+  const userID = ctx.message.from.id;
+  const currStatus = statuses.get(userID);
+  if (currStatus) {
+    const dataToGet = currStatus.split(':')[1];
+    return dataToGet === 'list';
+  }
+  return false;
+}
+
