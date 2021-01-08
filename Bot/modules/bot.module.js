@@ -91,3 +91,26 @@ function onGetCourse(ctx) { // on bot /get_course
   };
   ctx.reply('Задайте название курса:');
 }
+
+async function onDocument(ctx) { // on bot document
+  const userID = ctx.message.from.id;
+  const currStatus = statuses.get(userID);
+  const courseID = currStatus.split(':')[2];
+  const { 'file_id': fileId } = ctx.update.message.document;
+  const fileUrl = await ctx.telegram.getFileLink(fileId);
+  const response = await axios.get(fileUrl);
+  const groupList = response.data.split('\n');
+  const groupName = groupList.shift();
+  const withTokens = response.data.split('\n');
+  withTokens.shift();
+  const cgID = uidgen.generateSync();
+  const {
+    labs_number: labsN,
+    tests_number: testsN,
+    additional,
+  } = await db.getCourseInfo(courseID);
+  await db.fillStudentsTable(ctx, groupList, groupName, courseID, withTokens);
+  await db.insertCG(cgID, courseID, groupName);
+  await db.createCourseXTable(cgID, labsN, testsN, additional);
+  await db.fillCourseXTable(cgID, withTokens, labsN, testsN, additional);
+}
