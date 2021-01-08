@@ -204,4 +204,5 @@ module exports = {
   onAddGroup,
   onGetList,
   onGetCourse,
+  onDocument,
 };
