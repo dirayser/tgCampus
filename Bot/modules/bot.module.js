@@ -25,3 +25,21 @@ function onLabNumGet(ctx, text, userID) { // on labsNumb waited
     ctx.reply('0 <= Количество контрольных <= 10');
   }
 }
+
+function onTestNumGet(ctx, text, userID) { // on testsNumb waited
+  const n = +text;
+  if (n <= 5 && n >= 0) {
+    courses[userID].testNumb = Math.floor(+text);
+    statuses.set(userID, 'wait:additional');
+    ctx.reply('Наличие дополнительных баллов: (y/n)');
+  } else {
+    ctx.reply('0 <= Количество контрольных <= 5');
+  }
+}
+
+
+function onAdditGet(ctx, text, userID) { // on additional waited
+  courses[userID].additional = text.toLowerCase() === 'y';
+  statuses.set(userID, 'wait:check');
+  ctx.reply('Всё верно? (y/n)\n' + JSON.stringify(courses[userID]));
+}
