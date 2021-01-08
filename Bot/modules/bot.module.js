@@ -9,6 +9,29 @@ const createExcel = require('./excel.module');
 const uidgen = new UIDGenerator(); // token generator
 const statuses = statusChanger();
 
+function onText(ctx) {
+  const userID = ctx.message.from.id;
+  const username = ctx.message.from.username;
+  const currStatus = statuses.get(userID);
+  const text = ctx.message.text;
+  if (currStatus) {
+    const dataToGet = currStatus.split(':')[1];
+    if (dataToGet === 'courseName') {
+      onCourseNameGet(ctx, text, userID);
+    } else if (dataToGet === 'labNumb') {
+      onLabNumGet(ctx, text, userID);
+    } else if (dataToGet === 'testNumb') {
+      onTestNumGet(ctx, text, userID);
+    } else if (dataToGet === 'additional') {
+      onAdditGet(ctx, text, userID);
+    } else if (dataToGet === 'check') {
+      onCheck(ctx, text, userID, username);
+    }
+  } else {
+    ctx.reply('Используйте команды для общения с ботом');
+  }
+}
+
 function onCourseNameGet(ctx, text, userID) { // on courseName waited
   courses[userID].courseName = text;
   statuses.set(userID, 'wait:labNumb');
