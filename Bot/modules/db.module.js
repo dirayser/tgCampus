@@ -51,6 +51,15 @@ function selectData(query, responseHandler = x => x) { // for select query
   });
   return promise;
 }
+function insertCourse(ctx, courses, userID, username) { // adds course for teacher / register teacher if needed
+  const currCourse = courses[userID];
+  const query = `INSERT INTO Courses VALUES
+  ('${currCourse.courseID}', '${currCourse.courseName}', ${userID}, 
+    ${currCourse.labNumb}, ${currCourse.testNumb}, ${+currCourse.additional})`;
+  const promise = new Promise((resolve, reject) =>    
+  }
+  return promise;
+}
 
 function isTeacherRegistred(userID) { // checks if teacher is registred
   const query = `SELECT name FROM public.teachers WHERE teacher_id=${userID}`;
