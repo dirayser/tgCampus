@@ -56,8 +56,26 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
   const query = `INSERT INTO Courses VALUES
   ('${currCourse.courseID}', '${currCourse.courseName}', ${userID}, 
     ${currCourse.labNumb}, ${currCourse.testNumb}, ${+currCourse.additional})`;
-  const promise = new Promise((resolve, reject) =>    
-  }
+  const promise = new Promise((resolve, reject) => {
+    (async () => {
+      const client = await pool.connect();
+      try {
+        await client.query(query);
+        await client.release();
+        ctx.reply('Курс добавлен');
+        const isRegistred = await isTeacherRegistred(userID);
+        if (!isRegistred) {
+          await insertTeacher(ctx, userID, username);
+        }
+        resolve();
+      } catch (e) {
+        await client.release();
+        console.log(e);
+        ctx.reply('Курс не добавлен');
+        reject();
+      }
+    })();
+  });
   return promise;
 }
 
