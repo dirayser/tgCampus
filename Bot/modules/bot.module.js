@@ -72,3 +72,13 @@ async function onAddGroup(ctx) { // on bot /add_group
     answerWithCourses(ctx, coursesExist, false);
   }
 }
+
+async function onGetList(ctx) { // on bot /get_list
+  const userID = ctx.message.from.id;
+  const coursesExist = await db.getCourses(userID);
+  if (!coursesExist.length) {
+    ctx.reply('Отсутствуют курсы для добавления групп');
+  } else {
+    answerWithCourses(ctx, coursesExist, true);
+  }
+}
