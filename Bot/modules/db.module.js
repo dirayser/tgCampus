@@ -31,4 +31,5 @@ function insertData(query, ctx, message) { // for insert/create query
       }
     })();
   });
+  return promise;
 }
