@@ -23,3 +23,14 @@ process.on('unhandledRejection', () => {
   }
   pool.end();
 })();
+
+function createTableQuery(table, tables) { // creates query for table
+  let query = `CREATE TABLE IF NOT EXISTS ${table} `;
+  query += '(';
+  for (const field in tables[table]) { // add field and data type
+    query += ` ${field} ${tables[table][field]}`;
+    if (field !== 'PRIMARY KEY') query += ',';
+  }
+  query += ')';
+  return query;
+}
