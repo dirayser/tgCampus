@@ -131,3 +131,30 @@ function answerWithCourses(ctx, answer, isListNeeded) { // answers with courses 
   };
   ctx.reply('Выберите курс:', keyboard);
 }
+
+async function onCBquery(ctx) { // on bot callback query
+  const userID = ctx.update['callback_query'].message.chat.id;
+  const messageID = ctx.update['callback_query'].message['message_id'];
+  ctx.deleteMessage(messageID);
+  const data = ctx.update['callback_query'].data;
+  const dataToGet = data.split(':');
+  if (dataToGet[2] && !dataToGet[3]) {
+    const groups = await db.getCourseGroups(dataToGet[1]);
+    answerWithGroups(ctx, groups);
+  } else if (dataToGet[3]) {
+    const cgID = dataToGet[1];
+    const groupList = await db.getCourseX(cgID);
+    await createExcel(ctx, groupList, cgID, userID);
+
+  } else if (dataToGet[0] === 'course') {
+    const replyText = `
+    Пришлите список группы текстовым файлом в следующем формате
+
+    ИМЯ ГРУППЫ
+    Студент 1
+    Студент 2
+    ...`;
+    statuses.set(userID, `wait:list:${dataToGet[1]}`);
+    ctx.reply(replyText);
+  }
+}
