@@ -201,4 +201,7 @@ function answerWithGroups(ctx, groups) { // answers with groups keyboard
 module exports = {
   onText,
   isDocWaited,
+  onAddGroup,
+  onGetList,
+  onGetCourse,
 };
