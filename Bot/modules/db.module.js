@@ -51,6 +51,7 @@ function selectData(query, responseHandler = x => x) { // for select query
   });
   return promise;
 }
+
 function insertCourse(ctx, courses, userID, username) { // adds course for teacher / register teacher if needed
   const currCourse = courses[userID];
   const query = `INSERT INTO Courses VALUES
