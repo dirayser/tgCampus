@@ -198,7 +198,7 @@ function answerWithGroups(ctx, groups) { // answers with groups keyboard
   ctx.reply('Выберите группу:', keyboard);
 }
 
-module exports = {
+module.exports = {
   onText,
   isDocWaited,
   onAddGroup,
