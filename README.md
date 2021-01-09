@@ -29,3 +29,5 @@ git clone https://github.com/dirayser/tgCampus
   port: <your_port>,
   botToken = <your_botToken>;
 ```
+# Помощь
+Задавайте вопросы в телеграм одному из [контрибьютеров](вставить линк) или добавляйте issues в [репозиторий](https://github.com/dirayser/tgCampus) проэкта.
