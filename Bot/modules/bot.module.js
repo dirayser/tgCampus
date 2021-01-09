@@ -45,7 +45,7 @@ function onLabNumGet(ctx, text, userID) { // on labsNumb waited
     statuses.set(userID, 'wait:testNumb');
     ctx.reply('Количество контрольных работ в курсе:');
   } else {
-    ctx.reply('0 <= Количество контрольных <= 10');
+    ctx.reply('0 <= Количество лабораторных <= 10');
   }
 }
 
