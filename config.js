@@ -6,4 +6,4 @@ module.exports = {
   port: process.env.port,
   botToken: process.env.botToken,
   ssl: true,
-}
+};

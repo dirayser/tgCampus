@@ -1,6 +1,6 @@
 'use strict';
 
-const tables = { 
+const tables = {
   'Public.Teachers': {
     'teacher_id': 'int',
     'name': 'varchar',
