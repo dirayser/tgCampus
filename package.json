@@ -12,5 +12,8 @@
     "eslint": "^7.17.0",
     "eslint-config-metarhia": "^7.0.1",
     "eslint-plugin-import": "^2.22.1"
+  },
+  "dependencies": {
+    "telegraf": "^4.3.0"
   }
 }

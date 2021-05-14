@@ -1,6 +1,6 @@
 'use strict';
 
-const Telegraf = require('telegraf');
+const { Telegraf } = require('telegraf');
 const tgCampus = require('./modules/bot.module');
 const config = require('../config');
 
@@ -25,4 +25,7 @@ bot.on('callback_query', tgCampus.onCBquery);
 
 bot.on('text', tgCampus.onText);
 
-bot.launch();
+bot.launch()
+
+process.once('SIGINT', () => bot.stop('SIGINT'))
+process.once('SIGTERM', () => bot.stop('SIGTERM'))

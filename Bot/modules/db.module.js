@@ -2,11 +2,12 @@
 
 const UIDGenerator = require('uid-generator');
 const pool = require('../../DB/pool');
+const config = require('../../config');
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 process.on('unhandledRejection', error => {
   console.log(error);
-  pool.end();
+  process.exit()
 });
 process.on('exit', () => {
   pool.end();
@@ -58,7 +59,7 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
     try {
       await client.query(query);
       await client.release();
-      ctx.reply('Курс добавлен');
+      ctx.reply(config.messages.successCourseMessage);
       const isRegistred = await isTeacherRegistred(userID);
       if (!isRegistred) {
         await insertTeacher(ctx, userID, username);
@@ -67,7 +68,7 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
     } catch (e) {
       await client.release();
       console.log(e);
-      ctx.reply('Курс не добавлен');
+      ctx.reply(config.messages.dismissMessage);
       reject();
     }
   });
@@ -81,7 +82,7 @@ function isTeacherRegistred(userID) { // checks if teacher is registred
 
 function insertTeacher(ctx, userID, username) { // adds teacher to teachers
   const query = `INSERT INTO Teachers VALUES (${userID}, '${username}')`;
-  const message = 'Вы зарегестрированы как преподаватель';
+  const message = config.messages.teacherRegistredMessage;
   return insertData(query, ctx, message);
 }
 
@@ -192,7 +193,7 @@ function getCourses(userID) { // gets courses by teacher
 
 function fillStudentsTable(ctx, groupList, groupName, courseID, withTokens) { // inserts students to table
   const qry = createStudentsInsert(groupList, groupName, courseID, withTokens);
-  const message = 'Студенты добавлены';
+  const message = config.messages.studentsAddedMessage;
   return insertData(qry, ctx, message);
 }
 
