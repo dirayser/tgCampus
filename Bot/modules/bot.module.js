@@ -3,6 +3,7 @@
 const axios = require('axios');
 const UIDGenerator = require('uid-generator');
 const db = require('./db.module');
+const config = require('../../config');
 const { statusChanger, courses } = require('./status.module');
 const ExcelTable = require('./excel.module');
 
@@ -35,7 +36,7 @@ function onText(ctx) {
 function onCourseNameGet(ctx, text, userID) { // on courseName waited
   courses[userID].courseName = text;
   statuses.set(userID, 'wait:labNumb');
-  ctx.reply('Количество лабораторных работ в курсе:');
+  ctx.reply(config.messages.labsAmountMessage);
 }
 
 function onLabNumGet(ctx, text, userID) { // on labsNumb waited
@@ -43,9 +44,9 @@ function onLabNumGet(ctx, text, userID) { // on labsNumb waited
   if (n <= 10 && n >= 0) {
     courses[userID].labNumb = Math.floor(n);
     statuses.set(userID, 'wait:testNumb');
-    ctx.reply('Количество контрольных работ в курсе:');
+    ctx.reply(config.messages.testsAmountMessage);
   } else {
-    ctx.reply('0 <= Количество лабораторных <= 10');
+    ctx.reply(config.messages.labsAmountErrorMessage);
   }
 }
 
@@ -54,9 +55,9 @@ function onTestNumGet(ctx, text, userID) { // on testsNumb waited
   if (n <= 5 && n >= 0) {
     courses[userID].testNumb = Math.floor(+text);
     statuses.set(userID, 'wait:additional');
-    ctx.reply('Наличие дополнительных баллов: (y/n)');
+    ctx.reply(config.messages.additionalMessage);
   } else {
-    ctx.reply('0 <= Количество контрольных <= 5');
+    ctx.reply(config.messages.testsAmountErrorMessage);
   }
 }
 
@@ -71,7 +72,7 @@ async function onCheck(ctx, text, userID, username) { // on check waited
   if (text.toLowerCase() === 'y') {
     await db.insertCourse(ctx, courses, userID, username);
   } else {
-    ctx.reply('Курс не добавлен');
+    ctx.reply(config.messages.dismissMessage);
   }
   statuses.unset(userID);
 }
@@ -90,7 +91,7 @@ async function onAddGroup(ctx) { // on bot /add_group
   const userID = ctx.message.from.id;
   const coursesExist = await db.getCourses(userID);
   if (!coursesExist.length) {
-    ctx.reply('Отсутствуют курсы для добавления групп');
+    ctx.reply(config.messages.addGroupErrorMessage);
   } else {
     answerWithCourses(ctx, coursesExist, false);
   }
@@ -100,7 +101,7 @@ async function onGetList(ctx) { // on bot /get_list
   const userID = ctx.message.from.id;
   const coursesExist = await db.getCourses(userID);
   if (!coursesExist.length) {
-    ctx.reply('Отсутствуют курсы для добавления групп');
+    ctx.reply(config.messages.addGroupErrorMessage);
   } else {
     answerWithCourses(ctx, coursesExist, true);
   }
@@ -112,7 +113,7 @@ function onGetCourse(ctx) { // on bot /get_course
   courses[userID] = {
     courseID: uidgen.generateSync(),
   };
-  ctx.reply('Задайте название курса:');
+  ctx.reply(config.messages.courseNameMessage);
 }
 
 async function onDocument(ctx) { // on bot document
@@ -170,13 +171,7 @@ async function onCBquery(ctx) { // on bot callback query
     const table = new ExcelTable()
     await table.configureTable(ctx, groupList, cgID, userID);
   } else if (dataToGet[0] === 'course') {
-    const replyText = `
-    Пришлите список группы текстовым файлом в следующем формате
-
-    ИМЯ ГРУППЫ
-    Студент 1
-    Студент 2
-    ...`;
+    const replyText = config.messages.groupListFormatMessage;
     statuses.set(userID, `wait:list:${dataToGet[1]}`);
     ctx.reply(replyText);
   }
