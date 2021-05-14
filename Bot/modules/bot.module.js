@@ -4,7 +4,7 @@ const axios = require('axios');
 const UIDGenerator = require('uid-generator');
 const db = require('./db.module');
 const { statusChanger, courses } = require('./status.module');
-const createExcel = require('./excel.module');
+const ExcelTable = require('./excel.module');
 
 const uidgen = new UIDGenerator(); // token generator
 const statuses = statusChanger();
@@ -167,8 +167,8 @@ async function onCBquery(ctx) { // on bot callback query
   } else if (dataToGet[3]) {
     const cgID = dataToGet[1];
     const groupList = await db.getCourseX(cgID);
-    await createExcel(ctx, groupList, cgID, userID);
-
+    const table = new ExcelTable()
+    await table.configureTable(ctx, groupList, cgID, userID);
   } else if (dataToGet[0] === 'course') {
     const replyText = `
     Пришлите список группы текстовым файлом в следующем формате
