@@ -7,7 +7,7 @@ const config = require('../../config');
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 process.on('unhandledRejection', error => {
   console.log(error);
-  process.exit()
+  process.exit();
 });
 process.on('exit', () => {
   pool.end();
