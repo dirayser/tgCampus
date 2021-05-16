@@ -11,11 +11,14 @@ class ExcelTable {
     const worksheet = workbook.addWorksheet('Group List');
     worksheet.columns = getColumns(groupList);
     worksheet.addRows(getRows(groupList));
-    await workbook.xlsx.writeFile(`${cgID}.xlsx`);
-    ctx.telegram.sendDocument(userID, {
-      source: `${cgID}.xlsx`,
-      filename: 'list.xlsx',
-    });
+    if(sendNeeded) {
+      await workbook.xlsx.writeFile(`${cgID}.xlsx`);
+      ctx.telegram.sendDocument(userID, {
+        source: `${cgID}.xlsx`,
+        filename: 'list.xlsx',
+      });
+    } else return workbook
+    
   }
 
   getColumns(groupList) { // gets columns for xlsx
