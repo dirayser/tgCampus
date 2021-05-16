@@ -122,7 +122,7 @@ async function onDocument(ctx) { // on bot document
   const courseID = currStatus.split(':')[2];
   const { 'file_id': fileId } = ctx.update.message.document;
   const fileUrl = await ctx.telegram.getFileLink(fileId);
-  const response = await axios.get(fileUrl);
+  const response = await axios.get(fileUrl.href);
   const groupList = response.data.split('\n');
   const groupName = groupList.shift();
   const withTokens = response.data.split('\n');
