@@ -9,16 +9,18 @@ class ExcelTable {
   async configureTable(ctx, groupList, cgID, userID, sendNeeded = true) { // creates and sends xlsx file
     const workbook = new excel.Workbook();
     const worksheet = workbook.addWorksheet('Group List');
-    worksheet.columns = getColumns(groupList);
-    worksheet.addRows(getRows(groupList));
-    if(sendNeeded) {
+    worksheet.columns = this.getColumns(groupList);
+    worksheet.addRows(this.getRows(groupList));
+    if (sendNeeded) {
       await workbook.xlsx.writeFile(`${cgID}.xlsx`);
       ctx.telegram.sendDocument(userID, {
         source: `${cgID}.xlsx`,
         filename: 'list.xlsx',
       });
-    } else return workbook
-    
+    } else {
+      return workbook;
+    }
+
   }
 
   getColumns(groupList) { // gets columns for xlsx

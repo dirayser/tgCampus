@@ -168,7 +168,7 @@ async function onCBquery(ctx) { // on bot callback query
   } else if (dataToGet[3]) {
     const cgID = dataToGet[1];
     const groupList = await db.getCourseX(cgID);
-    const table = new ExcelTable()
+    const table = new ExcelTable();
     await table.configureTable(ctx, groupList, cgID, userID);
   } else if (dataToGet[0] === 'course') {
     const replyText = config.messages.groupListFormatMessage;

@@ -2,4 +2,4 @@
 
 const { Telegraf } = require('telegraf');
 
-console.assert(new Telegraf().telegram.options.apiMode === 'bot')
+console.assert(new Telegraf().telegram.options.apiMode === 'bot');

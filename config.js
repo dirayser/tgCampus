@@ -26,6 +26,6 @@ module.exports = {
     Студент 2
     ...`,
     teacherRegistredMessage: 'Вы зарегестрированы как преподаватель',
-    studentsAddedMessage: 'Студенты добавлены'
-  }
+    studentsAddedMessage: 'Студенты добавлены',
+  },
 };
