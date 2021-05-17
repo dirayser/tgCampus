@@ -20,13 +20,15 @@ function onText(ctx) {
     'labNumb': onLabNumGet,
     'testNumb': onTestNumGet,
     'additional': onAdditGet,
-    'check': onCheck,
-  }
+  };
   if (currStatus) {
     const dataToGet = currStatus.split(':')[1];
-    console.log(dataToGet);
-    for (let prop in functions) {
-      if (dataToGet === prop) functions[prop](ctx, text, userID);
+    if (dataToGet === 'check') {
+      onCheck(ctx, text, userID, username);
+    } else {
+      for (let prop in functions) {
+        if (dataToGet === prop) functions[prop](ctx, text, userID);
+      }
     }
   } else {
     ctx.reply('Используйте команды для общения с ботом');
