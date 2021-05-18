@@ -15,18 +15,20 @@ function onText(ctx) {
   const username = ctx.message.from.username;
   const currStatus = statuses.get(userID);
   const text = ctx.message.text;
+  const functions = {
+    'courseName': onCourseNameGet,
+    'labNumb': onLabNumGet,
+    'testNumb': onTestNumGet,
+    'additional': onAdditGet,
+  };
   if (currStatus) {
     const dataToGet = currStatus.split(':')[1];
-    if (dataToGet === 'courseName') {
-      onCourseNameGet(ctx, text, userID);
-    } else if (dataToGet === 'labNumb') {
-      onLabNumGet(ctx, text, userID);
-    } else if (dataToGet === 'testNumb') {
-      onTestNumGet(ctx, text, userID);
-    } else if (dataToGet === 'additional') {
-      onAdditGet(ctx, text, userID);
-    } else if (dataToGet === 'check') {
+    if (dataToGet === 'check') {
       onCheck(ctx, text, userID, username);
+    } else {
+      for (let prop in functions) {
+        if (dataToGet === prop) functions[prop](ctx, text, userID);
+      }
     }
   } else {
     ctx.reply('Используйте команды для общения с ботом');
