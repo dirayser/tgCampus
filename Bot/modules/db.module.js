@@ -75,6 +75,26 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
   return promise;
 }
 
+async function setMark(course_id, student_name, where, mark) {
+  const promise = new Promise((resolve, reject) => {
+      (async () => {
+          const query = `UPDATE public.course_${course_id} 
+          SET ${where}=${mark} WHERE student_name='${student_name}'`;
+          const client = await pool.connect();
+          try {
+              await client.query(query);
+              await client.release();
+              resolve();
+          } catch (e) {
+              console.log(e);
+              await client.release();
+              reject();
+          }
+      })();
+  });
+  return promise;
+}
+
 function isTeacherRegistred(userID) { // checks if teacher is registred
   const query = `SELECT name FROM public.teachers WHERE teacher_id=${userID}`;
   return selectData(query, res => res.rows.length);
@@ -227,5 +247,6 @@ module.exports = {
   getCourseGroups,
   fillCourseXTable,
   getCourseX,
+  setMark,
 };
 

@@ -25,6 +25,8 @@ function onText(ctx) {
     const dataToGet = currStatus.split(':')[1];
     if (dataToGet === 'check') {
       onCheck(ctx, text, userID, username);
+    } else if (dataToGet === 'setMark'){
+      onSetMark(ctx);
     } else {
       for (let prop in functions) {
         if (dataToGet === prop) functions[prop](ctx, text, userID);
@@ -33,6 +35,12 @@ function onText(ctx) {
   } else {
     ctx.reply('Используйте команды для общения с ботом');
   }
+}
+
+function onGetMark(ctx) { // on setMark waited
+  const userID = ctx.message.from.id;
+  statuses.set(userID, 'wait:setMark');
+  ctx.reply(config.messages.setMarkMessage);
 }
 
 function onCourseNameGet(ctx, text, userID) { // on courseName waited
@@ -62,7 +70,6 @@ function onTestNumGet(ctx, text, userID) { // on testsNumb waited
     ctx.reply(config.messages.testsAmountErrorMessage);
   }
 }
-
 
 function onAdditGet(ctx, text, userID) { // on additional waited
   courses[userID].additional = text.toLowerCase() === 'y';
@@ -107,6 +114,14 @@ async function onGetList(ctx) { // on bot /get_list
   } else {
     answerWithCourses(ctx, coursesExist, true);
   }
+}
+
+async function onSetMark(ctx) {
+  const text = ctx.message.text;
+  const info = text.split('/');
+  const [cgID, student_name, where, mark] = info;
+  await db.setMark(cgID, student_name, where, mark);
+  ctx.reply(config.messages.markSettedMessage);
 }
 
 function onGetCourse(ctx) { // on bot /get_course
@@ -203,4 +218,5 @@ module.exports = {
   onGetCourse,
   onDocument,
   onCBquery,
+  onGetMark,
 };
