@@ -20,13 +20,12 @@ function onText(ctx) {
     'labNumb': onLabNumGet,
     'testNumb': onTestNumGet,
     'additional': onAdditGet,
+    'setMark': SetMark,
   };
   if (currStatus) {
     const dataToGet = currStatus.split(':')[1];
     if (dataToGet === 'check') {
       onCheck(ctx, text, userID, username);
-    } else if (dataToGet === 'setMark'){
-      onSetMark(ctx);
     } else {
       for (let prop in functions) {
         if (dataToGet === prop) functions[prop](ctx, text, userID);
@@ -37,7 +36,7 @@ function onText(ctx) {
   }
 }
 
-function onGetMark(ctx) { // on setMark waited
+function onSetMark(ctx) { // on setMark waited
   const userID = ctx.message.from.id;
   statuses.set(userID, 'wait:setMark');
   ctx.reply(config.messages.setMarkMessage);
@@ -116,7 +115,7 @@ async function onGetList(ctx) { // on bot /get_list
   }
 }
 
-async function onSetMark(ctx) {
+async function SetMark(ctx) {
   const text = ctx.message.text;
   const info = text.split('/');
   const [cgID, student_name, where, mark] = info;
@@ -218,5 +217,5 @@ module.exports = {
   onGetCourse,
   onDocument,
   onCBquery,
-  onGetMark,
+  onSetMark,
 };
