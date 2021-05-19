@@ -1,15 +1,15 @@
-'use strict';
+'use strict'
 
 const { Pool } = require('pg');
 const config = require('../config');
 
 const pool = new Pool({
-  user: config.postgre.user,
-  host: config.postgre.host,
-  database: config.postgre.database,
-  password: config.postgre.password,
-  port: config.postgre.port,
-  ssl: config.postgre.ssl,
+  user: config.user,
+  host: config.host,
+  database: config.database,
+  password: config.password,
+  port: config.port,
+  ssl: config.ssl,
 });
 
 module.exports = pool;
