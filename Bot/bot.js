@@ -16,6 +16,8 @@ bot.command('/add_course', tgCampus.onGetCourse);
 
 bot.command('/get_list', tgCampus.onGetList);
 
+bot.command('/set_mark', tgCampus.onSetMark);
+
 bot.on('document', async ctx => {
   const isWaited = tgCampus.isDocWaited(ctx);
   if (isWaited) tgCampus.onDocument(ctx);
