@@ -5,9 +5,9 @@ module.exports = {
     database: process.env.dbName,
     password: process.env.dbPswd,
     port: process.env.port,
-    botToken: process.env.botToken,
     ssl: true,
   },
+  botToken: process.env.botToken,
   messages: {
     labsAmountMessage: 'Количество лабораторных работ в курсе:',
     testsAmountMessage: 'Количество контрольных работ в курсе:',

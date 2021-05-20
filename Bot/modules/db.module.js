@@ -78,8 +78,9 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
 async function setMark(course_id, student_name, where, mark) {
   const promise = new Promise((resolve, reject) => {
       (async () => {
-          const query = `UPDATE public.course_${course_id} 
-          SET ${where}=${mark} WHERE student_name='${student_name}'`;
+          const total = await prevTotal(course_id, student_name) + Number(mark);
+          const query = `UPDATE public.course_${course_id}
+          SET ${where}=${mark}, Total=${total} WHERE student_name='${student_name}'`;
           const client = await pool.connect();
           try {
               await client.query(query);
@@ -98,6 +99,12 @@ async function setMark(course_id, student_name, where, mark) {
 function isTeacherRegistred(userID) { // checks if teacher is registred
   const query = `SELECT name FROM public.teachers WHERE teacher_id=${userID}`;
   return selectData(query, res => res.rows.length);
+}
+
+function prevTotal(course_id, student_name) { // return prevTotal
+  const query = `SELECT Total FROM public.course_${course_id} 
+  WHERE student_name='${student_name}'`;
+  return selectData(query, res => res.rows[0].total);
 }
 
 function insertTeacher(ctx, userID, username) { // adds teacher to teachers
@@ -138,6 +145,7 @@ function createCourseXTableTemplate(labsN, testsN, additional) { // creates temp
   if (additional) { // add adds
     table['Additional'] = 'float';
   }
+  table['Total'] = 'int';
   table['PRIMARY KEY'] = '(student_id)';
   return table;
 }
@@ -148,10 +156,11 @@ function fillCourseXTable(cgID, withTokens, labsN, testsN, additional) { // inse
 }
 
 function createCourseXInsert(cgID, withTokens, labsN, testsN, additional) { // creates query for function above
+  const total = 0;
   const insertQuery = `INSERT INTO Course_${cgID} VALUES `;
   const arrayToAdd = [];
   withTokens.forEach((student, number) => {
-    const arr = [student[0], number + 1, student[1], labsN, testsN, additional];
+    const arr = [student[0], number + 1, student[1], labsN, testsN, additional, total];
     const newField = createCourseXField(...arr);
     arrayToAdd.push(newField);
   });
@@ -167,7 +176,7 @@ function createCourseXInsert(cgID, withTokens, labsN, testsN, additional) { // c
 
 function createCourseXField(id, number, name, labsN, testsN, isAdditional) { // creates fields for function above
   const returnArr = [id, number, name];
-  for (let i = 0; i < labsN + testsN + +isAdditional; i++) {
+  for (let i = 0; i <= labsN + testsN + +isAdditional; i++) {
     returnArr.push(0);
   }
   return returnArr;
