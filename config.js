@@ -31,4 +31,12 @@ module.exports = {
   Пришлите сообщение в таком формате: course_group_id/student name/task_num/mark`,
   markSettedMessage: 'Оценка добавлена!',
   },
-};
+  letters: {
+    0: 'F',
+    60: 'E',
+    65: 'D',
+    75: 'C', 
+    85: 'B',
+    95: 'A',
+  },
+}
