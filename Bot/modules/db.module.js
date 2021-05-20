@@ -76,24 +76,12 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
 }
 
 async function setMark(course_id, student_name, where, mark) {
-  const promise = new Promise((resolve, reject) => {
-      (async () => {
-          const total = await prevTotal(course_id, student_name) + Number(mark);
-          const query = `UPDATE public.course_${course_id}
+  async () => {
+    const total = await prevTotal(course_id, student_name) + Number(mark);
+    const query = `UPDATE public.course_${course_id}
           SET ${where}=${mark}, Total=${total} WHERE student_name='${student_name}'`;
-          const client = await pool.connect();
-          try {
-              await client.query(query);
-              await client.release();
-              resolve();
-          } catch (e) {
-              console.log(e);
-              await client.release();
-              reject();
-          }
-      })();
-  });
-  return promise;
+    await insertData(query);
+  })();
 }
 
 function isTeacherRegistred(userID) { // checks if teacher is registred

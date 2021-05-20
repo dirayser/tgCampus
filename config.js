@@ -1,4 +1,5 @@
 module.exports = {
+  botToken: process.env.botToken,
   postgre: {
     user: process.env.dbUser,
     host: process.env.dbHost,

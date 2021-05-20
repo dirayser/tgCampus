@@ -95,6 +95,11 @@ function isDocWaited(ctx) { // checks if document is waited
   return false;
 }
 
+async function onGotDocument(ctx) {
+  const isWaited = isDocWaited(ctx);
+  if (isWaited) onDocument(ctx);
+}
+
 async function onAddGroup(ctx) { // on bot /add_group
   const userID = ctx.message.from.id;
   const coursesExist = await db.getCourses(userID);
@@ -215,7 +220,7 @@ module.exports = {
   onAddGroup,
   onGetList,
   onGetCourse,
-  onDocument,
+  onGotDocument,
   onCBquery,
   onSetMark,
 };
