@@ -84,8 +84,20 @@ async function setMark(course_id, student_name, where, mark) {
   await setLetterGrade(course_id, student_name);
   })();
 }
-
-
+ 
+function setLetterGrade(course_id, student_name) {
+  let letter;
+  (async () => { 
+    let result = await prevTotal(course_id, student_name);
+    for (let point in config.letters) {
+      if (result >= point) letter = config.letters[point];
+    };
+    const query = `UPDATE public.course_${course_id}
+      SET Letter='${letter}' WHERE student_name='${student_name}'`;
+    return insertData(query);
+  })();
+}
+ 
 function prevTotal(course_id, student_name) { // return prevTotal
   const query = `SELECT Total FROM public.course_${course_id} 
   WHERE student_name='${student_name}'`;
@@ -170,6 +182,7 @@ function createCourseXField(id, number, name, labsN, testsN, isAdditional) { // 
   for (let i = 0; i <= labsN + testsN + +isAdditional + 1; i++) {
     returnArr.push(0);
   }
+  //returnArr.push(0);
   return returnArr;
 }
  
