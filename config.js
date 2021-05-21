@@ -1,13 +1,14 @@
 module.exports = {
+  botToken: process.env.botToken,
   postgre: {
     user: process.env.dbUser,
     host: process.env.dbHost,
     database: process.env.dbName,
     password: process.env.dbPswd,
     port: process.env.port,
-    botToken: process.env.botToken,
     ssl: true,
   },
+  botToken: process.env.botToken,
   messages: {
     labsAmountMessage: 'Количество лабораторных работ в курсе:',
     testsAmountMessage: 'Количество контрольных работ в курсе:',
@@ -27,5 +28,16 @@ module.exports = {
     ...`,
     teacherRegistredMessage: 'Вы зарегестрированы как преподаватель',
     studentsAddedMessage: 'Студенты добавлены',
+    setMarkMessage: `
+  Пришлите сообщение в таком формате: course_group_id/student name/task_num/mark`,
+  markSettedMessage: 'Оценка добавлена!',
   },
-};
+  letters: {
+    0: 'F',
+    60: 'E',
+    65: 'D',
+    75: 'C', 
+    85: 'B',
+    95: 'A',
+  },
+}
