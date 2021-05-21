@@ -27,7 +27,7 @@ function onText(ctx) {
     if (dataToGet === 'check') {
       onCheck(ctx, text, userID, username);
     } else {
-      for (let prop in functions) {
+      for (const prop in functions) {
         if (dataToGet === prop) functions[prop](ctx, text, userID);
       }
     }
