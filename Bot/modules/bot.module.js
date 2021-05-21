@@ -73,7 +73,8 @@ function onTestNumGet(ctx, text, userID) { // on testsNumb waited
 function onAdditGet(ctx, text, userID) { // on additional waited
   courses[userID].additional = text.toLowerCase() === 'y';
   statuses.set(userID, 'wait:check');
-  ctx.reply('Всё верно? (y/n)\n' + JSON.stringify(courses[userID]));
+  const message = serialize(...Object.values(courses[userID]));
+  ctx.reply(message);
 }
 
 function serialize (courseID, courseName, labNumb, testNumb, additional) {
