@@ -96,7 +96,7 @@ async function setLetterGrade(course_id, student_name) {
 
 function prevTotal(course_id, student_name) { // return prevTotal
   const query = `SELECT Total FROM public.course_${course_id} 
-  WHERE student_name='${student_name}'`;
+    WHERE student_name='${student_name}'`;
   return selectData(query, res => res.rows[0].total);
 }
 
