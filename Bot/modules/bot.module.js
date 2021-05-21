@@ -15,7 +15,7 @@ function onText(ctx) {
   const username = ctx.message.from.username;
   const currStatus = statuses.get(userID);
   const text = ctx.message.text;
-  const functions = {
+  const statusHandlers = {
     'courseName': onCourseNameGet,
     'labNumb': onLabNumGet,
     'testNumb': onTestNumGet,
@@ -27,8 +27,8 @@ function onText(ctx) {
     if (dataToGet === 'check') {
       onCheck(ctx, text, userID, username);
     } else {
-      for (let prop in functions) {
-        if (dataToGet === prop) functions[prop](ctx, text, userID);
+      for (const handler in statusHandlers) {
+        if (dataToGet === handler) statusHandlers[handler](ctx, text, userID);
       }
     }
   } else {

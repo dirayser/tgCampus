@@ -8,6 +8,7 @@ module.exports = {
     port: process.env.port,
     ssl: true,
   },
+  botToken: process.env.botToken,
   messages: {
     labsAmountMessage: 'Количество лабораторных работ в курсе:',
     testsAmountMessage: 'Количество контрольных работ в курсе:',
@@ -31,4 +32,12 @@ module.exports = {
   Пришлите сообщение в таком формате: course_group_id/student name/task_num/mark`,
   markSettedMessage: 'Оценка добавлена!',
   },
-};
+  letters: {
+    0: 'F',
+    60: 'E',
+    65: 'D',
+    75: 'C', 
+    85: 'B',
+    95: 'A',
+  },
+}
