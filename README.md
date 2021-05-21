@@ -38,4 +38,7 @@ git clone https://github.com/dirayser/tgCampus
   botToken = <your_botToken>;
 ```
 # Помощь
-Задавайте вопросы в телеграм одному из [контрибьютеров](https://github.com/dirayser/tgCampus/blob/master/README.md#%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%B8%D0%B1%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D1%8B) или добавляйте issues в [репозиторий](https://github.com/dirayser/tgCampus) проэкта.
+Задавайте вопросы в телеграм одному из [контрибьютеров](https://github.com/dirayser/tgCampus/blob/master/README.md#%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%B8%D0%B1%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D1%8B) или добавляйте issues в [репозиторий](https://github.com/dirayser/tgCampus) проекта.
+
+# Лицензия
+Это проект имеет [MIT лицензию](https://github.com/dirayser/tgCampus/blob/master/LICENSE.md)
