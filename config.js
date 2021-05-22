@@ -8,7 +8,6 @@ module.exports = {
     port: process.env.port,
     ssl: true,
   },
-  botToken: process.env.botToken,
   messages: {
     labsAmountMessage: 'Количество лабораторных работ в курсе:',
     testsAmountMessage: 'Количество контрольных работ в курсе:',
