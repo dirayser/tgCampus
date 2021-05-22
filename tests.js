@@ -18,7 +18,7 @@ statuses.set(2, 5);
 console.assert(statuses.get(2) === 5); //4
 
 statuses.set('id003');
-console.assert(statuses.get('id003') === undefined) //5
+console.assert(statuses.get('id003') === undefined); //5
 
 console.assert(statuses.get('id000') === undefined); //6
 

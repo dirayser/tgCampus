@@ -75,28 +75,28 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
   return promise;
 }
 
-async function setMark(course_id, student_name, where, mark) {
-  const total = await prevTotal(course_id, student_name) + Number(mark);
-  const query = `UPDATE public.course_${course_id}
-    SET ${where}=${mark}, Total=${total} WHERE student_name='${student_name}'`;
+async function setMark(courseID, studentName, where, mark) {
+  const total = await prevTotal(courseID, studentName) + Number(mark);
+  const query = `UPDATE public.course_${courseID}
+    SET ${where}=${mark}, Total=${total} WHERE student_name='${studentName}'`;
   await insertData(query);
-  await setLetterGrade(course_id, student_name);
+  await setLetterGrade(courseID, studentName);
 }
 
-async function setLetterGrade(course_id, student_name) {
+async function setLetterGrade(courseID, studentName) {
   let letter;
-  const result = await prevTotal(course_id, student_name);
+  const result = await prevTotal(courseID, studentName);
   for (const point in config.letters) {
     if (result >= point) letter = config.letters[point];
   }
-  const query = `UPDATE public.course_${course_id}
-      SET Letter='${letter}' WHERE student_name='${student_name}'`;
+  const query = `UPDATE public.course_${courseID}
+      SET Letter='${letter}' WHERE student_name='${studentName}'`;
   return insertData(query);
 }
 
-function prevTotal(course_id, student_name) { // return prevTotal
-  const query = `SELECT Total FROM public.course_${course_id} 
-    WHERE student_name='${student_name}'`;
+function prevTotal(courseID, studentName) { // return prevTotal
+  const query = `SELECT Total FROM public.course_${courseID} 
+    WHERE student_name='${studentName}'`;
   return selectData(query, res => res.rows[0].total);
 }
 
@@ -155,7 +155,6 @@ function fillCourseXTable(cgID, withTokens, labsN, testsN, additional) { // inse
 }
 
 function createCourseXInsert(cgID, withTokens, labsN, testsN, additional) { // creates query for function above
-  const total = 0;
   const insertQuery = `INSERT INTO Course_${cgID} VALUES `;
   const arrayToAdd = [];
   withTokens.forEach((student, number) => {
@@ -214,7 +213,7 @@ function insertCG(cgID, courseID, groupName) { // adds course/group relationship
 }
 
 function getCourses(userID) { // gets courses by teacher
-  const query = `SELECT course_ID, course_name 
+  const query = `SELECT course_id, course_name 
     FROM public.courses 
     WHERE teacher_id=${userID}`;
   return selectData(query, res => res.rows);

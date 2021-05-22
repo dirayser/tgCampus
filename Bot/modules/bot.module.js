@@ -77,13 +77,13 @@ function onAdditGet(ctx, text, userID) { // on additional waited
   ctx.reply(message);
 }
 
-function serialize (courseID, courseName, labNumb, testNumb, additional) {
+function serialize(courseID, courseName, labNumb, testNumb, additional) {
   const res = `Всё верно? (y/n)
   id: ${courseID},
   название курса: ${courseName},
   количество лабораторных: ${labNumb},
   количество контрольных: ${testNumb},
-  дополнительные баллы: ${(additional) ? 'есть' : 'нету'}.`;
+  дополнительные баллы: ${additional ? 'есть' : 'нету'}.`;
   return res;
 }
 
@@ -134,8 +134,8 @@ async function onGetList(ctx) { // on bot /get_list
 async function SetMark(ctx) {
   const text = ctx.message.text;
   const info = text.split('/');
-  const [cgID, student_name, where, mark] = info;
-  await db.setMark(cgID, student_name, where, mark);
+  const [cgID, studentName, where, mark] = info;
+  await db.setMark(cgID, studentName, where, mark);
   ctx.reply(config.messages.markSettedMessage);
 }
 
