@@ -15,7 +15,7 @@ function onText(ctx) {
   const username = ctx.message.from.username;
   const currStatus = statuses.get(userID);
   const text = ctx.message.text;
-  const functions = {
+  const statusHandlers = {
     'courseName': onCourseNameGet,
     'labNumb': onLabNumGet,
     'testNumb': onTestNumGet,
@@ -27,8 +27,8 @@ function onText(ctx) {
     if (dataToGet === 'check') {
       onCheck(ctx, text, userID, username);
     } else {
-      for (let prop in functions) {
-        if (dataToGet === prop) functions[prop](ctx, text, userID);
+      for (const handler in statusHandlers) {
+        if (dataToGet === handler) statusHandlers[handler](ctx, text, userID);
       }
     }
   } else {
@@ -73,7 +73,18 @@ function onTestNumGet(ctx, text, userID) { // on testsNumb waited
 function onAdditGet(ctx, text, userID) { // on additional waited
   courses[userID].additional = text.toLowerCase() === 'y';
   statuses.set(userID, 'wait:check');
-  ctx.reply('Всё верно? (y/n)\n' + JSON.stringify(courses[userID]));
+  const message = serialize(...Object.values(courses[userID]));
+  ctx.reply(message);
+}
+
+function serialize(courseID, courseName, labNumb, testNumb, additional) {
+  const res = `Всё верно? (y/n)
+  id: ${courseID},
+  название курса: ${courseName},
+  количество лабораторных: ${labNumb},
+  количество контрольных: ${testNumb},
+  дополнительные баллы: ${additional ? 'есть' : 'нету'}.`;
+  return res;
 }
 
 async function onCheck(ctx, text, userID, username) { // on check waited
@@ -93,6 +104,11 @@ function isDocWaited(ctx) { // checks if document is waited
     return dataToGet === 'list';
   }
   return false;
+}
+
+async function onGotDocument(ctx) {
+  const isWaited = isDocWaited(ctx);
+  if (isWaited) onDocument(ctx);
 }
 
 async function onAddGroup(ctx) { // on bot /add_group
@@ -118,8 +134,8 @@ async function onGetList(ctx) { // on bot /get_list
 async function SetMark(ctx) {
   const text = ctx.message.text;
   const info = text.split('/');
-  const [cgID, student_name, where, mark] = info;
-  await db.setMark(cgID, student_name, where, mark);
+  const [cgID, studentName, where, mark] = info;
+  await db.setMark(cgID, studentName, where, mark);
   ctx.reply(config.messages.markSettedMessage);
 }
 
@@ -215,7 +231,7 @@ module.exports = {
   onAddGroup,
   onGetList,
   onGetCourse,
-  onDocument,
+  onGotDocument,
   onCBquery,
   onSetMark,
 };

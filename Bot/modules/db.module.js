@@ -75,24 +75,29 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
   return promise;
 }
 
-async function setMark(course_id, student_name, where, mark) {
-  const promise = new Promise((resolve, reject) => {
-      (async () => {
-          const query = `UPDATE public.course_${course_id} 
-          SET ${where}=${mark} WHERE student_name='${student_name}'`;
-          const client = await pool.connect();
-          try {
-              await client.query(query);
-              await client.release();
-              resolve();
-          } catch (e) {
-              console.log(e);
-              await client.release();
-              reject();
-          }
-      })();
-  });
-  return promise;
+async function setMark(courseID, studentName, where, mark) {
+  const total = await prevTotal(courseID, studentName) + Number(mark);
+  const query = `UPDATE public.course_${courseID}
+    SET ${where}=${mark}, Total=${total} WHERE student_name='${studentName}'`;
+  await insertData(query);
+  await setLetterGrade(courseID, studentName);
+}
+
+async function setLetterGrade(courseID, studentName) {
+  let letter;
+  const result = await prevTotal(courseID, studentName);
+  for (const point in config.letters) {
+    if (result >= point) letter = config.letters[point];
+  }
+  const query = `UPDATE public.course_${courseID}
+      SET Letter='${letter}' WHERE student_name='${studentName}'`;
+  return insertData(query);
+}
+
+function prevTotal(courseID, studentName) { // return prevTotal
+  const query = `SELECT Total FROM public.course_${courseID} 
+    WHERE student_name='${studentName}'`;
+  return selectData(query, res => res.rows[0].total);
 }
 
 function isTeacherRegistred(userID) { // checks if teacher is registred
@@ -138,6 +143,8 @@ function createCourseXTableTemplate(labsN, testsN, additional) { // creates temp
   if (additional) { // add adds
     table['Additional'] = 'float';
   }
+  table['Total'] = 'int';
+  table['Letter'] = 'varchar';
   table['PRIMARY KEY'] = '(student_id)';
   return table;
 }
@@ -167,9 +174,10 @@ function createCourseXInsert(cgID, withTokens, labsN, testsN, additional) { // c
 
 function createCourseXField(id, number, name, labsN, testsN, isAdditional) { // creates fields for function above
   const returnArr = [id, number, name];
-  for (let i = 0; i < labsN + testsN + +isAdditional; i++) {
+  for (let i = 0; i <= labsN + testsN + +isAdditional + 1; i++) {
     returnArr.push(0);
   }
+  //returnArr.push(0);
   return returnArr;
 }
 
@@ -205,7 +213,7 @@ function insertCG(cgID, courseID, groupName) { // adds course/group relationship
 }
 
 function getCourses(userID) { // gets courses by teacher
-  const query = `SELECT course_ID, course_name 
+  const query = `SELECT course_id, course_name 
     FROM public.courses 
     WHERE teacher_id=${userID}`;
   return selectData(query, res => res.rows);
@@ -249,4 +257,6 @@ module.exports = {
   getCourseX,
   setMark,
 };
+
+
 
