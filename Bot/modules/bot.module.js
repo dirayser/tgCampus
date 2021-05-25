@@ -148,7 +148,7 @@ async function SetMark(ctx) {
 
 async function DeleteCourse(ctx, courseName, userID) {
   await db.deleteCourse(courseName, userID);
-  ctx.reply(config.messages.markSettedMessage);
+  ctx.reply(config.messages.courseDeletedMessage);
 }
 
 function onGetCourse(ctx) { // on bot /get_course
