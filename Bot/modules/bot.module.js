@@ -46,7 +46,7 @@ function onSetMark(ctx) { // on setMark waited
 function onDeleteCourse(ctx) { // on setMark waited
   const userID = ctx.message.from.id;
   statuses.set(userID, 'wait:deleteCourse');
-  ctx.reply(config.messages.setMarkMessage);
+  ctx.reply(config.messages.deleteCourseMessage);
 }
 
 function onCourseNameGet(ctx, text, userID) { // on courseName waited

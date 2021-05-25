@@ -30,6 +30,7 @@ module.exports = {
     setMarkMessage: `
   Пришлите сообщение в таком формате: course_group_id/student name/task_num/mark`,
   markSettedMessage: 'Оценка добавлена!',
+  deleteCourseMessage: 'Введите название курса, который хотите удалить',
   },
   letters: {
     0: 'F',
