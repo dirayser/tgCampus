@@ -75,6 +75,18 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
   return promise;
 }
 
+async function deleteCourse(courseName, userID) {
+  const template = `FROM public.courses
+	WHERE course_name='${courseName}' AND teacher_id=${userID}`;
+  const getCourseID = 'SELECT course_id ' + template;
+  const courseID = await selectData(getCourseID, res => res.rows[0].course_id);
+  const query1 = 'DELETE ' + template;
+  const query2 = `DELETE FROM public.courses_groups
+	WHERE course_id='${courseID}'`;
+  await insertData(query1);
+  await insertData(query2);
+}
+
 async function setMark(courseID, studentName, where, mark) {
   const total = await prevTotal(courseID, studentName) + Number(mark);
   const query = `UPDATE public.course_${courseID}
@@ -213,7 +225,7 @@ function insertCG(cgID, courseID, groupName) { // adds course/group relationship
 }
 
 function getCourses(userID) { // gets courses by teacher
-  const query = `SELECT course_id, course_name 
+  const query = `SELECT course_ID, course_name 
     FROM public.courses 
     WHERE teacher_id=${userID}`;
   return selectData(query, res => res.rows);
@@ -256,7 +268,5 @@ module.exports = {
   fillCourseXTable,
   getCourseX,
   setMark,
+  deleteCourse,
 };
-
-
-

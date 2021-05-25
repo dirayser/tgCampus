@@ -21,6 +21,7 @@ function onText(ctx) {
     'testNumb': onTestNumGet,
     'additional': onAdditGet,
     'setMark': SetMark,
+    'deleteCourse': DeleteCourse,
   };
   if (currStatus) {
     const dataToGet = currStatus.split(':')[1];
@@ -40,6 +41,12 @@ function onSetMark(ctx) { // on setMark waited
   const userID = ctx.message.from.id;
   statuses.set(userID, 'wait:setMark');
   ctx.reply(config.messages.setMarkMessage);
+}
+
+function onDeleteCourse(ctx) { // on setMark waited
+  const userID = ctx.message.from.id;
+  statuses.set(userID, 'wait:deleteCourse');
+  ctx.reply(config.messages.deleteCourseMessage);
 }
 
 function onCourseNameGet(ctx, text, userID) { // on courseName waited
@@ -139,6 +146,11 @@ async function SetMark(ctx) {
   ctx.reply(config.messages.markSettedMessage);
 }
 
+async function DeleteCourse(ctx, courseName, userID) {
+  await db.deleteCourse(courseName, userID);
+  ctx.reply(config.messages.courseDeletedMessage);
+}
+
 function onGetCourse(ctx) { // on bot /get_course
   const userID = ctx.message.from.id;
   statuses.set(userID, 'wait:courseName');
@@ -234,4 +246,5 @@ module.exports = {
   onGotDocument,
   onCBquery,
   onSetMark,
+  onDeleteCourse,
 };
