@@ -8,7 +8,6 @@ module.exports = {
     port: process.env.port,
     ssl: true,
   },
-  botToken: process.env.botToken,
   messages: {
     labsAmountMessage: 'Количество лабораторных работ в курсе:',
     testsAmountMessage: 'Количество контрольных работ в курсе:',
@@ -29,8 +28,10 @@ module.exports = {
     teacherRegistredMessage: 'Вы зарегестрированы как преподаватель',
     studentsAddedMessage: 'Студенты добавлены',
     setMarkMessage: `
-  Пришлите сообщение в таком формате: course_group_id/student name/task_num/mark`,
-  markSettedMessage: 'Оценка добавлена!',
+    Пришлите сообщение в таком формате: course_group_id/student name/task_num/mark`,
+    markSettedMessage: 'Оценка добавлена!',
+    deleteCourseMessage: 'Введите название курса, который хотите удалить',
+    courseDeletedMessage: 'Курс удален.',
   },
   letters: {
     0: 'F',

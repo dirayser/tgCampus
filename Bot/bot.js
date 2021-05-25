@@ -18,6 +18,8 @@ bot.command('/get_list', tgCampus.onGetList);
 
 bot.command('/set_mark', tgCampus.onSetMark);
 
+bot.command('/delete_course', tgCampus.onDeleteCourse);
+
 bot.on('document', tgCampus.onGotDocument);
 
 bot.on('callback_query', tgCampus.onCBquery);

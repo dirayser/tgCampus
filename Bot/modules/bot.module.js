@@ -21,6 +21,7 @@ function onText(ctx) {
     'testNumb': onTestNumGet,
     'additional': onAdditGet,
     'setMark': SetMark,
+    'deleteCourse': DeleteCourse,
   };
   if (currStatus) {
     const dataToGet = currStatus.split(':')[1];
@@ -40,6 +41,12 @@ function onSetMark(ctx) { // on setMark waited
   const userID = ctx.message.from.id;
   statuses.set(userID, 'wait:setMark');
   ctx.reply(config.messages.setMarkMessage);
+}
+
+function onDeleteCourse(ctx) { // on setMark waited
+  const userID = ctx.message.from.id;
+  statuses.set(userID, 'wait:deleteCourse');
+  ctx.reply(config.messages.deleteCourseMessage);
 }
 
 function onCourseNameGet(ctx, text, userID) { // on courseName waited
@@ -73,7 +80,18 @@ function onTestNumGet(ctx, text, userID) { // on testsNumb waited
 function onAdditGet(ctx, text, userID) { // on additional waited
   courses[userID].additional = text.toLowerCase() === 'y';
   statuses.set(userID, 'wait:check');
-  ctx.reply('Всё верно? (y/n)\n' + JSON.stringify(courses[userID]));
+  const message = serialize(...Object.values(courses[userID]));
+  ctx.reply(message);
+}
+
+function serialize(courseID, courseName, labNumb, testNumb, additional) {
+  const res = `Всё верно? (y/n)
+  id: ${courseID},
+  название курса: ${courseName},
+  количество лабораторных: ${labNumb},
+  количество контрольных: ${testNumb},
+  дополнительные баллы: ${additional ? 'есть' : 'нету'}.`;
+  return res;
 }
 
 async function onCheck(ctx, text, userID, username) { // on check waited
@@ -123,9 +141,14 @@ async function onGetList(ctx) { // on bot /get_list
 async function SetMark(ctx) {
   const text = ctx.message.text;
   const info = text.split('/');
-  const [cgID, student_name, where, mark] = info;
-  await db.setMark(cgID, student_name, where, mark);
+  const [cgID, studentName, where, mark] = info;
+  await db.setMark(cgID, studentName, where, mark);
   ctx.reply(config.messages.markSettedMessage);
+}
+
+async function DeleteCourse(ctx, courseName, userID) {
+  await db.deleteCourse(courseName, userID);
+  ctx.reply(config.messages.courseDeletedMessage);
 }
 
 function onGetCourse(ctx) { // on bot /get_course
@@ -223,4 +246,5 @@ module.exports = {
   onGotDocument,
   onCBquery,
   onSetMark,
+  onDeleteCourse,
 };

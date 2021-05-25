@@ -75,28 +75,40 @@ function insertCourse(ctx, courses, userID, username) { // adds course for teach
   return promise;
 }
 
-async function setMark(course_id, student_name, where, mark) {
-  const total = await prevTotal(course_id, student_name) + Number(mark);
-  const query = `UPDATE public.course_${course_id}
-    SET ${where}=${mark}, Total=${total} WHERE student_name='${student_name}'`;
-  await insertData(query);
-  await setLetterGrade(course_id, student_name);
+async function deleteCourse(courseName, userID) {
+  const template = `FROM public.courses
+	WHERE course_name='${courseName}' AND teacher_id=${userID}`;
+  const getCourseID = 'SELECT course_id ' + template;
+  const courseID = await selectData(getCourseID, res => res.rows[0].course_id);
+  const query1 = 'DELETE ' + template;
+  const query2 = `DELETE FROM public.courses_groups
+	WHERE course_id='${courseID}'`;
+  await insertData(query1);
+  await insertData(query2);
 }
 
-async function setLetterGrade(course_id, student_name) {
+async function setMark(courseID, studentName, where, mark) {
+  const total = await prevTotal(courseID, studentName) + Number(mark);
+  const query = `UPDATE public.course_${courseID}
+    SET ${where}=${mark}, Total=${total} WHERE student_name='${studentName}'`;
+  await insertData(query);
+  await setLetterGrade(courseID, studentName);
+}
+
+async function setLetterGrade(courseID, studentName) {
   let letter;
-  const result = await prevTotal(course_id, student_name);
+  const result = await prevTotal(courseID, studentName);
   for (const point in config.letters) {
     if (result >= point) letter = config.letters[point];
   }
-  const query = `UPDATE public.course_${course_id}
-      SET Letter='${letter}' WHERE student_name='${student_name}'`;
+  const query = `UPDATE public.course_${courseID}
+      SET Letter='${letter}' WHERE student_name='${studentName}'`;
   return insertData(query);
 }
 
-function prevTotal(course_id, student_name) { // return prevTotal
-  const query = `SELECT Total FROM public.course_${course_id} 
-    WHERE student_name='${student_name}'`;
+function prevTotal(courseID, studentName) { // return prevTotal
+  const query = `SELECT Total FROM public.course_${courseID} 
+    WHERE student_name='${studentName}'`;
   return selectData(query, res => res.rows[0].total);
 }
 
@@ -155,7 +167,6 @@ function fillCourseXTable(cgID, withTokens, labsN, testsN, additional) { // inse
 }
 
 function createCourseXInsert(cgID, withTokens, labsN, testsN, additional) { // creates query for function above
-  const total = 0;
   const insertQuery = `INSERT INTO Course_${cgID} VALUES `;
   const arrayToAdd = [];
   withTokens.forEach((student, number) => {
@@ -257,7 +268,5 @@ module.exports = {
   fillCourseXTable,
   getCourseX,
   setMark,
+  deleteCourse,
 };
-
-
-
