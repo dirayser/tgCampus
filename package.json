@@ -4,7 +4,7 @@
   "description": "",
   "main": "./Bot/bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +12,8 @@
     "eslint": "^7.17.0",
     "eslint-config-metarhia": "^7.0.1",
     "eslint-plugin-import": "^2.22.1"
+  },
+  "dependencies": {
+    "telegraf": "^4.3.0"
   }
 }
